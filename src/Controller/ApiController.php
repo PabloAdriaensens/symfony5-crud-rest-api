@@ -73,4 +73,21 @@ class ApiController extends AbstractController
 
         return $this->json('Deleted Successfully!');
     }
+
+    #[Route('/api/fetchall_api', name: 'fetchall_api', methods: ['GET'])]
+    public function fetchall_api(): Response
+    {
+        $data = $this->em->getRepository(Crud::class)->findAll();
+
+        $res = [];
+        foreach ($data as $d) {
+            $res[] = [
+                'id' => $d->getId(),
+                'title' => $d->getTitle(),
+                'content' => $d->getId(),
+            ];
+        }
+
+        return $this->json($res);
+    }
 }
