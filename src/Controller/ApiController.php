@@ -47,4 +47,30 @@ class ApiController extends AbstractController
 
         return $this->json('Inserted Successfully!');
     }
+
+    #[Route('/api/update_api/{id}', name: 'update_api', methods: ['PUT'])]
+    public function update_api(Request $request, $id): Response
+    {
+        $data = $this->em->getRepository(Crud::class)->find($id);
+        $parameter = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $data->setTitle($parameter['title']);
+        $data->setContent($parameter['content']);
+
+        $this->em->persist($data);
+        $this->em->flush();
+
+        return $this->json('Updated Successfully!');
+    }
+
+    #[Route('/api/delete_api/{id}', name: 'delete_api', methods: ['DELETE'])]
+    public function delete_api($id): Response
+    {
+        $data = $this->em->getRepository(Crud::class)->find($id);
+
+        $this->em->remove($data);
+        $this->em->flush();
+
+        return $this->json('Deleted Successfully!');
+    }
 }
